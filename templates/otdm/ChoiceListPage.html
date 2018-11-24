@@ -1,0 +1,56 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+{% load staticfiles %}
+
+{% block title %}
+Block {{ player.current_step }} of 5
+{% endblock %}
+
+{% block content %}
+
+<hr>
+
+<div class="progress">
+    <div class="progress-bar" style="width: {{ progress }}%">{{ player.current_step }} / 5</div>
+</div>
+
+<hr>
+
+<div>
+    <h3 class="text-center">
+        Gain {{ gain | c }} <em>per Week</em>
+    </h3>
+
+    <table class="table table-bordered" style="table-layout: fixed;">
+        <thead>
+        <tr class="text-center">
+            <th>Option A</th>
+            <th width="75">A</th>
+            <th width="75">B</th>
+            <th>Option B</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>xxxxxxxxx</td>
+            <td>y</td>
+            <td>z</td>
+            <td>0</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <pre>{{ var_name }}</pre>
+
+    <br>
+
+    <input type="number" name="{{ var_name }}">
+</div>
+
+<hr>
+
+{% next_button %}
+
+{% endblock %}
