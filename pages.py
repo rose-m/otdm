@@ -1,23 +1,45 @@
 from typing import List
 
 from ._builtin import Page, WaitPage
+from .choices import ChoiceManager
 from .config import GAIN_PER_WEEK
-from .step import ChoiceStep
 
 
 class ChoiceListPage(Page):
     form_model = 'player'
 
     def get_form_fields(self) -> List[str]:
-        return [ChoiceStep.get_variable_name(self.player.get_current_choice())]
+        manager = ChoiceManager(self.player)
+        return [manager.get_step().get_field()]
 
     def vars_for_template(self):
         # TODO: calculate "ranges" for A and B options
+        manager = ChoiceManager(self.player)
+
+        week_range = manager.get_week_range()
+        week_start = week_range[0]
+        week_end = week_range[-1]
+
+        option_a_weeks = week_range[:]
+        option_a_weeks.insert(0, week_start)
+        option_a_gain_count = [i - week_start + 1 for i in option_a_weeks]
+
+        option_b_weeks = week_range[:]
+        option_b_weeks.append(week_end)
+        option_b_gain_count = [week_end - i + 1 for i in option_b_weeks]
+
+        week_gain = zip(option_a_weeks, option_a_gain_count,
+                        option_b_weeks, option_b_gain_count)
 
         return {
             'gain': GAIN_PER_WEEK,
             'progress': self.player.get_current_step() / 5 * 100,
-            'var_name': ChoiceStep.get_variable_name(self.player.get_current_choice())
+            'var_name': manager.get_step().get_field(),
+
+            'week_start': week_start,
+            'week_end': week_end,
+
+            'week_gain': week_gain
         }
 
     def before_next_page(self):

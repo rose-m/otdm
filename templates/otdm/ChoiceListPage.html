@@ -21,7 +21,7 @@ Block {{ player.current_step }} of 5
         Gain {{ gain | c }} <em>per Week</em>
     </h3>
 
-    <table class="table table-bordered" style="table-layout: fixed;">
+    <table class="otdm__choices-table table table-bordered" style="table-layout: fixed;">
         <thead>
         <tr class="text-center">
             <th>Option A</th>
@@ -30,13 +30,43 @@ Block {{ player.current_step }} of 5
             <th>Option B</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="small">
+        {% for week, gain, rev_week, rev_gain in week_gain %}
         <tr>
-            <td>xxxxxxxxx</td>
-            <td>y</td>
-            <td>z</td>
-            <td>0</td>
+            <td class="text-right">
+                {% if gain == 1 %}
+                in week <span class="otdm__week">{{ week }}</span>
+                {% else %}
+                starting in week <span class="otdm__week">{{ week_start }}</span>
+                and ending (after) week <span class="otdm__week">{{ week }}</span>
+                [<span class="otdm__week">{{ gain }}</span>]
+                {% endif %}
+            </td>
+            <td class="text-center otdm__choice-cell">
+                <label>
+                    <input type="radio" name="otdm__option_week{{forloop.counter}}"
+                           class="otdm__choice-input"
+                           value="A" data-week="{{ week }}">
+                </label>
+            </td>
+            <td class="text-center otdm__choice-cell">
+                <label>
+                    <input type="radio" name="otdm__option_week{{forloop.counter}}"
+                           class="otdm__choice-input"
+                           value="B" data-week="{{ week }}">
+                </label>
+            </td>
+            <td class="text-left">
+                {% if rev_gain == 1 %}
+                in week <span class="otdm__week">{{ rev_week }}</span>
+                {% else %}
+                starting in week <span class="otdm__week">{{ rev_week }}</span>
+                and ending (after) week <span class="otdm__week">{{ week_end }}</span>
+                [<span class="otdm__week">{{ rev_gain }}</span>]
+                {% endif %}
+            </td>
         </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
@@ -53,4 +83,12 @@ Block {{ player.current_step }} of 5
 
 {% next_button %}
 
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'otdm/styles/choices.css' %}"/>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'otdm/scripts/choices.js' %}"></script>
 {% endblock %}

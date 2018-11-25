@@ -3,8 +3,6 @@ from otree.api import (
     models
 )
 
-from .step import ChoiceStep
-
 author = 'Michael Rose <michael_rose@gmx.de>'
 
 doc = """
@@ -54,6 +52,3 @@ class Player(BasePlayer):
 
     def get_current_step(self) -> int:
         return self.current_step
-
-    def get_current_choice(self) -> ChoiceStep:
-        return ChoiceStep(self.current_step)
