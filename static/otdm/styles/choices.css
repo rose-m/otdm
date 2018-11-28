@@ -27,3 +27,7 @@ table.otdm__choices-table tr td.otdm__choice-cell .otdm__choice-input {
 table.otdm__choices-table tr td.otdm__choice-cell.highlight {
     background-color: #e5e5e5;
 }
+
+.otdm__next-button {
+    display: none;
+}

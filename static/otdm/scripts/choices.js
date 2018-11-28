@@ -4,10 +4,16 @@
         leaking anything into global scope.
      */
     var table = jQuery('.otdm__choices-table');
+    var waitingText = jQuery('.otdm__waiting');
+    var nextButtonWrapper = jQuery('.otdm__next-button');
+    var result = jQuery('input.otdm__value');
 
     getAllRadios().on('click', function () {
         var input = jQuery(this);
         var selected = getRadioInfo(input);
+        result.val(selected.week);
+        nextButtonWrapper.show();
+        waitingText.hide();
 
         getAllRadios().each(function () {
             var radio = jQuery(this);
@@ -83,6 +89,13 @@
         return table.find('.otdm__choice-cell > label');
     }
 
+    /**
+     * Returns an object with the name of the radio button (`otdm__option_weekN`),
+     * the value (`A` or `B`), and the week of the choice.
+     *
+     * @param {jquery} radio
+     * @return {{name: string, value: string, week: number}}
+     */
     function getRadioInfo(radio) {
         var name = radio.attr('name');
         var value = radio.val();

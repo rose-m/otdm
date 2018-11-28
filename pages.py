@@ -1,8 +1,10 @@
+from math import floor
+
 from typing import List
 
 from ._builtin import Page, WaitPage
 from .choices import ChoiceManager
-from .config import GAIN_PER_WEEK
+from .config import GAIN_PER_WEEK, NUM_WEEKS
 
 
 class ChoiceListPage(Page):
@@ -13,7 +15,6 @@ class ChoiceListPage(Page):
         return [manager.get_step().get_field()]
 
     def vars_for_template(self):
-        # TODO: calculate "ranges" for A and B options
         manager = ChoiceManager(self.player)
 
         week_range = manager.get_week_range()
@@ -43,6 +44,21 @@ class ChoiceListPage(Page):
         }
 
     def before_next_page(self):
+        manager = ChoiceManager(self.player)
+
+        # we fix the computed value as the client gives us the lower bound
+        # of the switch
+        field_name = manager.get_step().get_field()
+        switch_lower_bound = getattr(self.player, field_name)
+        if switch_lower_bound > 1:
+            if switch_lower_bound < floor(NUM_WEEKS / 2.0):
+                # values that are below half of the time frame get the "upper bound"
+                switch_lower_bound = switch_lower_bound + 1
+            else:
+                # values that are above half of the time frame get the "lower bound"
+                pass
+        setattr(self.player, field_name, switch_lower_bound)
+
         self.player.goto_next_step()
 
 

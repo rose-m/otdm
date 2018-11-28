@@ -21,7 +21,7 @@ Block {{ player.current_step }} of 5
         Gain {{ gain | c }} <em>per Week</em>
     </h3>
 
-    <table class="otdm__choices-table table table-bordered" style="table-layout: fixed;">
+    <table class="otdm__choices-table table table-bordered table-striped" style="table-layout: fixed;">
         <thead>
         <tr class="text-center">
             <th>Option A</th>
@@ -71,17 +71,17 @@ Block {{ player.current_step }} of 5
     </table>
 </div>
 
-<div>
-    <pre>{{ var_name }}</pre>
-
-    <br>
-
-    <input type="number" name="{{ var_name }}">
-</div>
+<input class="otdm__value" type="hidden" name="{{ var_name }}">
 
 <hr>
 
-{% next_button %}
+<div class="otdm__waiting">
+    You have to select an option above to continue.
+</div>
+
+<div class="otdm__next-button">
+    {% next_button %}
+</div>
 
 {% endblock %}
 
