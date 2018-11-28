@@ -28,6 +28,8 @@ table.otdm__choices-table tr td.otdm__choice-cell.highlight {
     background-color: #e5e5e5;
 }
 
+.otdm__confirm-button-wrapper,
+.otdm__player-confirmation,
 .otdm__next-button {
     display: none;
 }

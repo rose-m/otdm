@@ -3,16 +3,27 @@
         We use an IIFE to properly encapsulate all JavaScript code and prevent
         leaking anything into global scope.
      */
-    var table = jQuery('.otdm__choices-table');
+    var choicesSelectionWrapper = jQuery('.otdm__choices-selection');
+    var choicesTable = jQuery('.otdm__choices-table');
     var waitingText = jQuery('.otdm__waiting');
-    var nextButtonWrapper = jQuery('.otdm__next-button');
+
+    var confirmationButtonWrapper = jQuery('.otdm__confirm-button-wrapper');
+    var confirmationButton = jQuery('.otdm__confirm-button');
+    var confirmationWrapper = jQuery('.otdm__player-confirmation');
+    var confirmationNo = jQuery('.otdm__confirmation-no');
+
     var result = jQuery('input.otdm__value');
+
+    /* === === === === === ===
+        Radio Handling
+     * === === === === === === */
 
     getAllRadios().on('click', function () {
         var input = jQuery(this);
         var selected = getRadioInfo(input);
         result.val(selected.week);
-        nextButtonWrapper.show();
+        updateConfirmationText(input);
+        confirmationButtonWrapper.show();
         waitingText.hide();
 
         getAllRadios().each(function () {
@@ -60,12 +71,49 @@
         }, 200);
     });
 
+    /* === === === === === ===
+        Confirmation Handling
+     * === === === === === === */
+
+    confirmationButton.on('click', function () {
+        choicesSelectionWrapper.hide();
+        confirmationButtonWrapper.hide();
+        confirmationWrapper.show();
+    });
+
+    confirmationNo.on('click', function () {
+        choicesSelectionWrapper.show();
+        confirmationButtonWrapper.show();
+        confirmationWrapper.hide();
+    });
+
+    function updateConfirmationText(selectedRadio) {
+        var row = selectedRadio.closest('tr');
+        var info = getRadioInfo(selectedRadio);
+        var tbody = row.closest('tbody').first();
+        var rowIndex = tbody.children('tr').index(row);
+        if (rowIndex + 1 < tbody.children('tr').length) {
+            row = tbody.children('tr').eq(rowIndex + 1);
+        }
+
+        var leftContent = row.find('td:first-child').html();
+        var rightContent = row.find('td:last-child').html();
+        confirmationWrapper.find('.otdm__confirmation-either')
+            .html(info.value === 'A' ? rightContent : leftContent);
+        confirmationWrapper.find('.otdm__confirmation-other')
+            .html(info.value === 'A' ? leftContent : rightContent);
+    }
+
+    /* === === === === === ===
+        Utility Functions
+     * === === === === === === */
+
     function getAllRadios() {
-        return table.find('.otdm__choice-input');
+        return choicesTable.find('.otdm__choice-input');
     }
 
     function getAllLabels() {
-        return table.find('.otdm__choice-cell > label');
+        return choicesTable.find('.otdm__choice-cell > label');
     }
 
     /**

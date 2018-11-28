@@ -16,7 +16,7 @@ Block {{ player.current_step }} of 5
 
 <hr>
 
-<div>
+<div class="otdm__choices-selection">
     <h3 class="text-center">
         Gain {{ gain | c }} <em>per Week</em>
     </h3>
@@ -69,19 +69,44 @@ Block {{ player.current_step }} of 5
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="otdm__waiting">
+        You have to select an option above to continue.
+    </div>
+</div>
+
+<div class="otdm__confirm-button-wrapper">
+    <button class="btn btn-primary otdm__confirm-button" type="button">
+        Confirm
+    </button>
+</div>
+
+<div class="otdm__player-confirmation">
+    <h5>Your choices mean that you prefer to:</h5>
+
+    <p class="text-center">
+        Gain {{ gain | c }} <em>per Week</em>, <span class="otdm__confirmation-either"></span>
+    </p>
+
+    <p class="text-center">
+        <b>rather than</b>
+    </p>
+
+    <p class="text-center">
+        Gain {{ gain | c }} <em>per Week</em>, <span class="otdm__confirmation-other"></span>
+    </p>
+
+    <br>
+
+    <p class="text-center">Are you sure about your choice?</p>
+
+    <div class="text-center">
+        <button class="btn btn-primary otdm__confirmation-yes" type="submit">YES</button>
+        <button class="btn btn-light otdm__confirmation-no" type="button">NO</button>
+    </div>
 </div>
 
 <input class="otdm__value" type="hidden" name="{{ var_name }}">
-
-<hr>
-
-<div class="otdm__waiting">
-    You have to select an option above to continue.
-</div>
-
-<div class="otdm__next-button">
-    {% next_button %}
-</div>
 
 {% endblock %}
 
