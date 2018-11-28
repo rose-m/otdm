@@ -18,21 +18,12 @@
         getAllRadios().each(function () {
             var radio = jQuery(this);
             var info = getRadioInfo(radio);
-            if (info.name === selected.name) {
-                return;
-            }
-
-            if (info.value === selected.value) {
-                if (info.week < selected.week) {
+            var isSelected = isInSelectedGroup(selected, info);
+            if (isSelected !== undefined) {
+                if (isSelected) {
                     radio.prop('checked', true);
                 } else {
                     radio.prop('checked', false);
-                }
-            } else {
-                if (info.week < selected.week) {
-                    radio.prop('checked', false);
-                } else {
-                    radio.prop('checked', true);
                 }
             }
         });
@@ -52,24 +43,12 @@
         getAllRadios().each(function () {
             var radio = jQuery(this);
             var info = getRadioInfo(radio);
-            if (info.name === selected.name) {
-                if (info.value !== selected.value) {
-                    radio.closest('td').removeClass('highlight');
-                }
-                return;
-            }
-
-            if (info.value === selected.value) {
-                if (info.week < selected.week) {
+            var isSelected = isInSelectedGroup(selected, info);
+            if (isSelected !== undefined) {
+                if (isSelected) {
                     radio.closest('td').addClass('highlight');
                 } else {
                     radio.closest('td').removeClass('highlight');
-                }
-            } else {
-                if (info.week < selected.week) {
-                    radio.closest('td').removeClass('highlight');
-                } else {
-                    radio.closest('td').addClass('highlight');
                 }
             }
         });
@@ -91,19 +70,36 @@
 
     /**
      * Returns an object with the name of the radio button (`otdm__option_weekN`),
-     * the value (`A` or `B`), and the week of the choice.
+     * the entry index (1-based), the value (`A` or `B`), and the week of the choice.
      *
-     * @param {jquery} radio
-     * @return {{name: string, value: string, week: number}}
+     * @param {jQuery} radio
+     * @return {{index: number, name: string, value: string, week: number}}
      */
     function getRadioInfo(radio) {
+        var index = parseInt(radio.data('index'));
         var name = radio.attr('name');
         var value = radio.val();
         var week = parseInt(radio.data('week'));
         return {
+            index: index,
             name: name,
             value: value,
             week: week,
         };
+    }
+
+    function isInSelectedGroup(selected, check) {
+        if (check.name === selected.name) {
+            if (check.value !== selected.value) {
+                return false;
+            }
+            return undefined;
+        }
+
+        if (check.value === selected.value) {
+            return check.index < selected.index;
+        } else {
+            return check.index >= selected.index;
+        }
     }
 }());

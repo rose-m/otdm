@@ -46,14 +46,14 @@ Block {{ player.current_step }} of 5
                 <label>
                     <input type="radio" name="otdm__option_week{{forloop.counter}}"
                            class="otdm__choice-input"
-                           value="A" data-week="{{ week }}">
+                           value="A" data-week="{{ week }}" data-index="{{ forloop.counter }}">
                 </label>
             </td>
             <td class="text-center otdm__choice-cell">
                 <label>
                     <input type="radio" name="otdm__option_week{{forloop.counter}}"
                            class="otdm__choice-input"
-                           value="B" data-week="{{ week }}">
+                           value="B" data-week="{{ week }}" data-index="{{ forloop.counter }}">
                 </label>
             </td>
             <td class="text-left">
