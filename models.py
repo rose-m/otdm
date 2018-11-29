@@ -50,5 +50,8 @@ class Player(BasePlayer):
     def goto_next_step(self) -> None:
         self.current_step = self.current_step + 1
 
+    def cancel_game(self) -> None:
+        self.current_step = -1
+
     def get_current_step(self) -> int:
         return self.current_step

@@ -21,7 +21,7 @@
     getAllRadios().on('click', function () {
         var input = jQuery(this);
         var selected = getRadioInfo(input);
-        result.val(selected.week);
+        result.val(selected.index);
         updateConfirmationText(input);
         confirmationButtonWrapper.show();
         waitingText.hide();

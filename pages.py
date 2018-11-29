@@ -10,6 +10,9 @@ from .config import GAIN_PER_WEEK, NUM_WEEKS
 class ChoiceListPage(Page):
     form_model = 'player'
 
+    def is_displayed(self):
+        return self.player.get_current_step() != -1
+
     def get_form_fields(self) -> List[str]:
         manager = ChoiceManager(self.player)
         return [manager.get_step().get_field()]
@@ -46,20 +49,33 @@ class ChoiceListPage(Page):
     def before_next_page(self):
         manager = ChoiceManager(self.player)
 
-        # we fix the computed value as the client gives us the lower bound
-        # of the switch
-        field_name = manager.get_step().get_field()
-        switch_lower_bound = getattr(self.player, field_name)
-        if switch_lower_bound > 1:
-            if switch_lower_bound < floor(NUM_WEEKS / 2.0):
-                # values that are below half of the time frame get the "upper bound"
-                switch_lower_bound = switch_lower_bound + 1
-            else:
-                # values that are above half of the time frame get the "lower bound"
-                pass
-        setattr(self.player, field_name, switch_lower_bound)
+        # we fix the computed value as the client gives us just
+        # the index of the selected option - which is not directly a week
+        # the index is 1-based so we have subtract 1
 
-        self.player.goto_next_step()
+        field_name = manager.get_step().get_field()
+        index = getattr(self.player, field_name) - 1
+        week_range = manager.get_week_range()
+        print("Index: %s" % index)
+
+        # the number of selectable options is len(week_range) + 1
+        if index == 0 or index == len(week_range):
+            # selection is invalid - we cannot handle this case further
+            # as it would lead to invalid ranges in the future
+            setattr(self.player, field_name, index)
+            self.player.cancel_game()
+        else:
+            switch_lower_bound = week_range[index]
+            if switch_lower_bound > 1:
+                if switch_lower_bound < floor(NUM_WEEKS / 2.0):
+                    # values that are below half of the time frame get the "upper bound"
+                    switch_lower_bound = switch_lower_bound + 1
+                else:
+                    # values that are above half of the time frame get the "lower bound"
+                    pass
+            setattr(self.player, field_name, switch_lower_bound)
+
+            self.player.goto_next_step()
 
 
 class ResultsWaitPage(WaitPage):
