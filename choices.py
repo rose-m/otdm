@@ -11,7 +11,7 @@ class ChoiceStep(Enum):
     to elicit a certain c value.
 
     All enumeration values have four properties:
-    - the round number
+    - the round number in which the c value is elicited
     - the field name of the `player`
     - a function to get the starting week for the choice list
     - a function to get the ending week for the choice list

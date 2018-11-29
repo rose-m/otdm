@@ -32,6 +32,8 @@ class Player(BasePlayer):
     Equals the elicitation round, i.e. ranges from 1 (for c12) to 5 (c78).
     """
 
+    # IMPORTANT: DO NOT CHANGE THE VARIABLE NAMES FOR THE c values!
+
     c12 = models.IntegerField(initial=-1)
     """Represents the measured value of c_(1/2)"""
 
