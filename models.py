@@ -48,10 +48,18 @@ class Player(BasePlayer):
     """Represents the measured value of c_(7/8)"""
 
     def goto_next_step(self) -> None:
+        """Advances the player to the next step
+
+        Should be called after each `ChoiceListPage`
+        """
         self.current_step = self.current_step + 1
 
     def cancel_game(self) -> None:
+        """Sets the indicator that an invalid choice occurred"""
         self.current_step = -1
 
     def get_current_step(self) -> int:
+        """Get the current step the player is in
+        :return: current step (1-based)
+        """
         return self.current_step

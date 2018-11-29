@@ -8,6 +8,10 @@ from .config import GAIN_PER_WEEK, NUM_WEEKS
 
 
 class ChoiceListPage(Page):
+    """
+    Displays a list of choices to the player to elicitate a certain c value.
+    """
+
     form_model = 'player'
 
     def is_displayed(self):

@@ -6,6 +6,16 @@ from .models import Player
 
 
 class ChoiceStep(Enum):
+    """
+    Represents all the information required to produce a list of choices
+    to elicit a certain c value.
+
+    All enumeration values have four properties:
+    - the round number
+    - the field name of the `player`
+    - a function to get the starting week for the choice list
+    - a function to get the ending week for the choice list
+    """
     C_12 = 1, \
            'c12', \
            lambda p: 1, \
@@ -49,6 +59,10 @@ class ChoiceStep(Enum):
 
 
 class ChoiceManager:
+    """
+    Helper class to facilitate working with calculating week ranges
+    for the current step a player is in.
+    """
 
     def __init__(self, player: Player):
         self._player = player
