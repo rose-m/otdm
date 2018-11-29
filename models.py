@@ -1,7 +1,11 @@
+import random
 from otree.api import (
     BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     models
 )
+
+from .config import PAYOFF_TYPE
+from .payoffType import PayoffType
 
 author = 'Michael Rose <michael_rose@gmx.de>'
 
@@ -18,7 +22,12 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    pass
+
+    def creating_session(self):
+        players = self.get_players()
+        if PAYOFF_TYPE == PayoffType.RANDOM_PLAYER and len(players) > 0:
+            chosen = random.randint(0, len(players) - 1)
+            players[chosen].is_selected_for_payoff = True
 
 
 class Group(BaseGroup):
@@ -46,6 +55,9 @@ class Player(BasePlayer):
 
     c78 = models.IntegerField(initial=-1)
     """Represents the measured value of c_(7/8)"""
+
+    is_selected_for_payoff = models.BooleanField(initial=(PAYOFF_TYPE == PayoffType.ALL_PLAYERS))
+    """Indicates whether this player was chosen for payoff"""
 
     def goto_next_step(self) -> None:
         self.current_step = self.current_step + 1

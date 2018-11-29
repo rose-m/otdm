@@ -4,7 +4,7 @@ from typing import List
 
 from ._builtin import Page, WaitPage
 from .choices import ChoiceManager
-from .config import GAIN_PER_WEEK, NUM_WEEKS
+from .config import GAIN_PER_WEEK, NUM_WEEKS, PAYOFF_TYPE
 
 
 class ChoiceListPage(Page):
@@ -85,7 +85,15 @@ class ResultsWaitPage(WaitPage):
 
 
 class Results(Page):
-    pass
+
+    def before_next_page(self):
+        # we calculate the final payoff
+        if self.player.current_step == -1 or PAYOFF_TYPE is None:
+            # the player will not get any payoff
+            pass
+        elif (PAYOFF_TYPE == PAYOFF_TYPE.ALL_PLAYERS
+              or self.player.is_selected_for_payoff):
+            pass
 
 
 page_sequence = [
