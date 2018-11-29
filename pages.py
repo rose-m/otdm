@@ -60,7 +60,6 @@ class ChoiceListPage(Page):
         field_name = manager.get_step().get_field()
         index = getattr(self.player, field_name) - 1
         week_range = manager.get_week_range()
-        print("Index: %s" % index)
 
         # the number of selectable options is len(week_range) + 1
         if index == 0 or index == len(week_range):
